@@ -359,8 +359,8 @@ impl ValidationReport {
         self.inner.exit_code()
     }
 
-    fn to_json(&self, file: String) -> PyResult<String> {
-        serde_json::to_string(&self.inner.json_report(file))
+    fn to_json(&self) -> PyResult<String> {
+        serde_json::to_string(&self.inner.json_report())
             .map_err(|error| PyValueError::new_err(error.to_string()))
     }
 

@@ -44,10 +44,9 @@ def test_report_exports_stable_json():
         b"not a PDF", page.ValidationProfile.PDF_A_1B
     )
 
-    exported = json.loads(report.to_json("document.pdf"))
+    exported = json.loads(report.to_json())
 
     assert exported == {
-        "file": "document.pdf",
         "profile": "a-1b",
         "valid": False,
         "failures": [],
@@ -65,10 +64,12 @@ def test_inferred_profile_raises_for_invalid_bytes():
 
 
 def test_explicit_profile_reports_missing_file(tmp_path: Path):
+    missing_file = tmp_path / "missing.pdf"
     report = page.validate_file_with_profile(
-        tmp_path / "missing.pdf", page.ValidationProfile.PDF_A_1B
+        missing_file, page.ValidationProfile.PDF_A_1B
     )
 
     assert report.has_operational_failure() is True
     assert report.failures[0].category == page.FailureCategory.OPERATIONAL
     assert report.exit_code() == 1
+    assert json.loads(report.to_json())["file"] == str(missing_file)

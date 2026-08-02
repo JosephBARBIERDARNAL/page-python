@@ -1,0 +1,51 @@
+{
+  "file": "invalid.pdf",
+  "profile": "a-1b",
+  "valid": false,
+  "failures": [
+    {
+      "rule": "PDFA1B-HEADER-BINARY-COMMENT-001",
+      "message": "the PDF header must be immediately followed by a comment with four bytes above 127"
+    },
+    {
+      "rule": "PDFA1B-HEX-STRING-CHARACTERS-001",
+      "message": "a hexadecimal string contains a non-hexadecimal character"
+    },
+    {
+      "rule": "PDFA1B-ID-SCHEMA-001",
+      "message": "XMP does not contain the PDF/A Identification schema"
+    },
+    {
+      "rule": "PDFA1B-INFO-AUTHOR-001",
+      "message": "Info Author \"Ada Ferris\" does not equal the sole dc:creator entry None"
+    },
+    {
+      "rule": "PDFA1B-INFO-CREATOR-001",
+      "message": "Info Creator \"Hand-written PDF\" is not equivalent to xmp:CreatorTool []"
+    },
+    {
+      "rule": "PDFA1B-INFO-KEYWORDS-001",
+      "message": "Info Keywords \"Rust, PDF, metadata\" is not equivalent to pdf:Keywords []"
+    },
+    {
+      "rule": "PDFA1B-INFO-PRODUCER-001",
+      "message": "Info Producer \"Rust standard library demo\" is not equivalent to pdf:Producer []"
+    },
+    {
+      "rule": "PDFA1B-INFO-SUBJECT-001",
+      "message": "Info Subject \"Dependency-free PDF metadata test\" is not equivalent to dc:description['x-default'] []"
+    },
+    {
+      "rule": "PDFA1B-INFO-TITLE-001",
+      "message": "Info Title \"Rust Metadata Sample\" is not equivalent to dc:title['x-default'] []"
+    },
+    {
+      "rule": "PDFA1B-METADATA-STRUCTURE-001",
+      "message": "catalog Metadata must resolve to a stream with /Type /Metadata and /Subtype /XML"
+    },
+    {
+      "rule": "PDFA1B-TRAILER-ID-001",
+      "message": "the applicable document trailer does not contain an ID entry"
+    }
+  ]
+}

@@ -15,8 +15,6 @@ print(report)
 if not report.checks_passed:
     for failure in report.failures:
         print(f"[{failure.rule_id}] {failure.message}")
-
-json_output = report.to_json("document.pdf")
 ```
 
 `validate_file()` and `validate_bytes()` infer the PDF/A or PDF/UA profile from the document's XMP metadata. They raise `page.ValidationError` when the profile declaration is missing, malformed, or unsupported, or when the input cannot be read or parsed.
@@ -33,6 +31,13 @@ report = page.validate_file_with_profile(
 ```
 
 The explicit-profile functions always return a `ValidationReport`. Parser, operational, and conformance problems are represented in `report.failures`.
+
+You can export the results as JSON with:
+
+```python
+with open("report.json", "w") as f:
+    f.write(report.to_json())
+```
 
 <br>
 

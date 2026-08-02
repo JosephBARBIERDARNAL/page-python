@@ -564,9 +564,9 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
 name = "page_validation"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "304bdc929c398e588dd9c1dec214429735f699f8f2cc123dc7f3d79464432fbf"
+checksum = "171d0c8315b55d6425e8b34677ca2459454818a4712c8a48e199a712b04d8c30"
 dependencies = [
  "chrono",
  "lopdf",
