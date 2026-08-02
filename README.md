@@ -1,4 +1,4 @@
-# py-page
+# python-page
 
 Python bindings for [`page`](https://crates.io/crates/page_validation), a PDF/A and PDF/UA validator.
 
