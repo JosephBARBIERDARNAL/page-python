@@ -7,7 +7,7 @@ use page_validation::{
     ValidationReport as RustValidationReport,
 };
 use pyo3::create_exception;
-use pyo3::exceptions::PyException;
+use pyo3::exceptions::{PyException, PyValueError};
 use pyo3::prelude::*;
 
 create_exception!(_page, ValidationError, PyException);
@@ -357,6 +357,11 @@ impl ValidationReport {
 
     fn exit_code(&self) -> i32 {
         self.inner.exit_code()
+    }
+
+    fn to_json(&self, file: String) -> PyResult<String> {
+        serde_json::to_string(&self.inner.json_report(file))
+            .map_err(|error| PyValueError::new_err(error.to_string()))
     }
 
     fn __str__(&self) -> String {

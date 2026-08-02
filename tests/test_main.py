@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -36,6 +37,26 @@ def test_explicit_profile_returns_parser_report_for_invalid_bytes():
     assert report.failures[0].category == page.FailureCategory.PARSER
     assert report.exit_code() == 2
     assert "PDF-PARSE-001" in str(report)
+
+
+def test_report_exports_stable_json():
+    report = page.validate_bytes_with_profile(
+        b"not a PDF", page.ValidationProfile.PDF_A_1B
+    )
+
+    exported = json.loads(report.to_json("document.pdf"))
+
+    assert exported == {
+        "file": "document.pdf",
+        "profile": "a-1b",
+        "valid": False,
+        "failures": [],
+        "error": {
+            "kind": "parser",
+            "rule": "PDF-PARSE-001",
+            "message": report.failures[0].message,
+        },
+    }
 
 
 def test_inferred_profile_raises_for_invalid_bytes():
