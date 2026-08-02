@@ -1,7 +1,7 @@
 [project]
 name = "py-page"
 version = "0.1.0"
-description = "Python bindinds to page"
+description = "Python bindings for the page_validation PDF/A and PDF/UA validator"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -9,11 +9,14 @@ license-files = ["LICENSE"]
 authors = [
   { name = "Joseph Barbier", email = "joseph@ysunflower.com" },
 ]
-keywords = ["a", "keywords", "list", "of"]
+keywords = ["page", "pdf", "validation"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3"
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Programming Language :: Rust",
 ]
 dependencies = []
 
@@ -27,14 +30,20 @@ Repository = "https://github.com/josephbarbierdarnal/py-page"
 dev = [
   "coverage>=7.9.1",
   "genbadge>=1.1.2",
+  "maturin>=1.14.1",
   "prek>=0.3.2",
   "pytest>=8.3.5",
   "ruff>=0.11.13",
   "ty>=0.0.15",
 ]
 
-[tool.setuptools]
-packages = ["page"]
+[build-system]
+requires = ["maturin>=1.14,<2.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+module-name = "page._page"
+python-source = "."
 
 [tool.uv.sources]
 page = { workspace = true }
