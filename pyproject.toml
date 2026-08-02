@@ -1,6 +1,6 @@
 [project]
 name = "python-page"
-version = "0.1.0"
+version = "0.0.1"
 description = "Python bindings for the page_validation PDF/A and PDF/UA validator"
 readme = "README.md"
 requires-python = ">=3.10"
