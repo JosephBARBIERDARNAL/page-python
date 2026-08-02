@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 import page
@@ -41,7 +43,7 @@ def test_inferred_profile_raises_for_invalid_bytes():
         page.validate_bytes(b"not a PDF")
 
 
-def test_explicit_profile_reports_missing_file(tmp_path):
+def test_explicit_profile_reports_missing_file(tmp_path: Path):
     report = page.validate_file_with_profile(
         tmp_path / "missing.pdf", page.ValidationProfile.PDF_A_1B
     )
