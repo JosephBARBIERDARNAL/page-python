@@ -171,6 +171,7 @@ impl From<&SafetyLimits> for RustSafetyLimits {
             max_decoded_stream_size: limits.max_decoded_stream_size,
             max_object_count: limits.max_object_count,
             max_reference_depth: limits.max_reference_depth,
+            ..RustSafetyLimits::default()
         }
     }
 }
@@ -216,7 +217,7 @@ impl From<RustValidationFailure> for ValidationFailure {
 impl ValidationFailure {
     #[getter]
     fn rule_id(&self) -> &str {
-        self.inner.rule_id
+        &self.inner.rule_id
     }
 
     #[getter]
