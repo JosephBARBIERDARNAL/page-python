@@ -14,7 +14,7 @@ from page._page import (
     validate_file_with_profile,
 )
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 __all__ = [
     "FailureCategory",

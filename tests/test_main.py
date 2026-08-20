@@ -7,7 +7,7 @@ import page
 
 
 def test_version():
-    assert page.__version__ == "0.4.0"
+    assert page.__version__ == "0.4.1"
 
 
 def test_default_safety_limits():

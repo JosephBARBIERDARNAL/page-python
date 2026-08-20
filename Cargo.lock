@@ -564,7 +564,7 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
 name = "page-validation"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "page_validation",
  "pyo3",
@@ -573,7 +573,7 @@ dependencies = [
 
 [[package]]
 name = "page_validation"
-version = "0.4.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1cc0aad63b9868ed85a44a4cf9c1dc916f4a229596718aa7269b167474640ae6"
 dependencies = [
