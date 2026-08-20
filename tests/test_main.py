@@ -16,7 +16,7 @@ def test_default_safety_limits():
     assert limits.max_input_size == page.SafetyLimits.DEFAULT_MAX_INPUT_SIZE
     assert limits.max_decoded_stream_size == 32 * 1024 * 1024
     assert limits.max_object_count == 1_000_000
-    assert limits.max_reference_depth == 128
+    assert limits.max_reference_depth == 256
 
 
 def test_custom_safety_limits():
