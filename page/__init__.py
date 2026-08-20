@@ -1,5 +1,3 @@
-"""Python bindings for the ``page_validation`` Rust crate."""
-
 from page._page import (
     FailureCategory,
     PdfDocument,

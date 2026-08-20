@@ -1,5 +1,5 @@
 [project]
-name = "python-page"
+name = "page-validation"
 version = "0.0.1"
 description = "Python bindings for the page_validation PDF/A and PDF/UA validator"
 readme = "README.md"
@@ -21,10 +21,10 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Documentation = "https://josephbarbierdarnal.github.io/python-page/"
-Homepage = "https://josephbarbierdarnal.github.io/python-page/"
-Issues = "https://github.com/josephbarbierdarnal/python-page/issues"
-Repository = "https://github.com/josephbarbierdarnal/python-page"
+Documentation = "https://josephbarbierdarnal.github.io/page-validation/"
+Homepage = "https://josephbarbierdarnal.github.io/page-validation/"
+Issues = "https://github.com/josephbarbierdarnal/page-validation/issues"
+Repository = "https://github.com/josephbarbierdarnal/page-validation"
 
 [dependency-groups]
 dev = [

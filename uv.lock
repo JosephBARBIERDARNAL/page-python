@@ -423,7 +423,7 @@ wheels = [
 ]
 
 [[package]]
-name = "python-page"
+name = "page-validation"
 version = "0.0.1"
 source = { editable = "." }
 
