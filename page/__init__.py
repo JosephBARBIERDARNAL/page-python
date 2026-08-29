@@ -1,4 +1,5 @@
 from page._page import (
+    ComplianceResult,
     FailureCategory,
     PdfDocument,
     PdfObjectId,
@@ -8,15 +9,16 @@ from page._page import (
     ValidationFailure,
     ValidationProfile,
     ValidationReport,
-    validate_bytes,
-    validate_bytes_with_profile,
-    validate_file,
-    validate_file_with_profile,
+    is_pdf_compliant,
+    is_pdf_compliant_bytes,
+    validate_pdf,
+    validate_pdf_bytes,
 )
 
-__version__ = "0.4.1"
+__version__ = "0.5.0"
 
 __all__ = [
+    "ComplianceResult",
     "FailureCategory",
     "PdfDocument",
     "PdfObjectId",
@@ -26,8 +28,8 @@ __all__ = [
     "ValidationFailure",
     "ValidationProfile",
     "ValidationReport",
-    "validate_bytes",
-    "validate_bytes_with_profile",
-    "validate_file",
-    "validate_file_with_profile",
+    "is_pdf_compliant",
+    "is_pdf_compliant_bytes",
+    "validate_pdf",
+    "validate_pdf_bytes",
 ]

@@ -296,6 +296,37 @@ wheels = [
 ]
 
 [[package]]
+name = "page-validation"
+version = "0.5.0"
+source = { editable = "." }
+
+[package.dev-dependencies]
+dev = [
+    { name = "coverage" },
+    { name = "genbadge" },
+    { name = "maturin" },
+    { name = "prek" },
+    { name = "pyrefly" },
+    { name = "pytest" },
+    { name = "ruff" },
+    { name = "ty" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "coverage", specifier = ">=7.9.1" },
+    { name = "genbadge", specifier = ">=1.1.2" },
+    { name = "maturin", specifier = ">=1.14.1" },
+    { name = "prek", specifier = ">=0.3.2" },
+    { name = "pyrefly", specifier = ">=1.2.0" },
+    { name = "pytest", specifier = ">=8.3.5" },
+    { name = "ruff", specifier = ">=0.11.13" },
+    { name = "ty", specifier = ">=0.0.15" },
+]
+
+[[package]]
 name = "pillow"
 version = "12.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -420,37 +451,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/0f/fb/abddacf43738302242ecd237236c7c80cd7c1d27545e16e803770aee76e9/prek-0.4.11-py3-none-win32.whl", hash = "sha256:8b093e7624522146049e994d5cf283d01d71632b638620b79ae0f96afeaa2624", size = 5483539, upload-time = "2026-07-24T17:05:31.228Z" },
     { url = "https://files.pythonhosted.org/packages/00/1e/c293f7a15cb93963c4be36a02e144b93f43906bc02644a3f04e5708e7453/prek-0.4.11-py3-none-win_amd64.whl", hash = "sha256:5a3d7c80b970b456e5f1bcec8382008ee1ae6a3f324a6b9bb4ff7e666ab0f3c4", size = 5861119, upload-time = "2026-07-24T17:05:32.479Z" },
     { url = "https://files.pythonhosted.org/packages/cd/0c/05fe6eb9d6a54d0e02dfa8cc5ad6f86869bf953419ec15909a32466a28ee/prek-0.4.11-py3-none-win_arm64.whl", hash = "sha256:e7b0df37ce05e45a14a9da39ab104691474d72f139bf4f6c860f754763a322cb", size = 5626386, upload-time = "2026-07-24T17:05:33.813Z" },
-]
-
-[[package]]
-name = "page-validation"
-version = "0.4.1"
-source = { editable = "." }
-
-[package.dev-dependencies]
-dev = [
-    { name = "coverage" },
-    { name = "genbadge" },
-    { name = "maturin" },
-    { name = "prek" },
-    { name = "pyrefly" },
-    { name = "pytest" },
-    { name = "ruff" },
-    { name = "ty" },
-]
-
-[package.metadata]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "coverage", specifier = ">=7.9.1" },
-    { name = "genbadge", specifier = ">=1.1.2" },
-    { name = "maturin", specifier = ">=1.14.1" },
-    { name = "prek", specifier = ">=0.3.2" },
-    { name = "pyrefly", specifier = ">=1.2.0" },
-    { name = "pytest", specifier = ">=8.3.5" },
-    { name = "ruff", specifier = ">=0.11.13" },
-    { name = "ty", specifier = ">=0.0.15" },
 ]
 
 [[package]]

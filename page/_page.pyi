@@ -3,6 +3,12 @@ from typing import ClassVar
 
 class ValidationError(Exception): ...
 
+class ComplianceResult:
+    @property
+    def profile(self) -> ValidationProfile: ...
+    @property
+    def is_compliant(self) -> bool: ...
+
 class ValidationProfile:
     PDF_A_1B: ClassVar[ValidationProfile]
     PDF_A_1A: ClassVar[ValidationProfile]
@@ -27,21 +33,27 @@ class FailureCategory:
 class SafetyLimits:
     DEFAULT_MAX_INPUT_SIZE: ClassVar[int]
     DEFAULT_MAX_DECODED_STREAM_SIZE: ClassVar[int]
+    DEFAULT_MAX_TOTAL_DECODED_CONTENT_SIZE: ClassVar[int]
     DEFAULT_MAX_OBJECT_COUNT: ClassVar[int]
     DEFAULT_MAX_REFERENCE_DEPTH: ClassVar[int]
+    DEFAULT_MAX_XREF_REVISIONS: ClassVar[int]
 
     max_input_size: int
     max_decoded_stream_size: int
+    max_total_decoded_content_size: int
     max_object_count: int
     max_reference_depth: int
+    max_xref_revisions: int
 
     def __init__(
         self,
         *,
         max_input_size: int | None = None,
         max_decoded_stream_size: int | None = None,
+        max_total_decoded_content_size: int | None = None,
         max_object_count: int | None = None,
         max_reference_depth: int | None = None,
+        max_xref_revisions: int | None = None,
     ) -> None: ...
 
 class PdfObjectId:
@@ -82,7 +94,7 @@ class ValidationReport:
     @property
     def profile(self) -> ValidationProfile: ...
     @property
-    def checks_passed(self) -> bool: ...
+    def is_compliant(self) -> bool: ...
     @property
     def preliminary(self) -> bool: ...
     @property
@@ -95,19 +107,23 @@ class ValidationReport:
     def exit_code(self) -> int: ...
     def to_json(self) -> str: ...
 
-def validate_file(
-    path: str | PathLike[str], limits: SafetyLimits | None = None
-) -> ValidationReport: ...
-def validate_file_with_profile(
+def is_pdf_compliant(
     path: str | PathLike[str],
-    profile: ValidationProfile,
+    profile: ValidationProfile | None = None,
+    limits: SafetyLimits | None = None,
+) -> ComplianceResult: ...
+def is_pdf_compliant_bytes(
+    data: bytes,
+    profile: ValidationProfile | None = None,
+    limits: SafetyLimits | None = None,
+) -> ComplianceResult: ...
+def validate_pdf(
+    path: str | PathLike[str],
+    profile: ValidationProfile | None = None,
     limits: SafetyLimits | None = None,
 ) -> ValidationReport: ...
-def validate_bytes(
-    data: bytes, limits: SafetyLimits | None = None
-) -> ValidationReport: ...
-def validate_bytes_with_profile(
+def validate_pdf_bytes(
     data: bytes,
-    profile: ValidationProfile,
+    profile: ValidationProfile | None = None,
     limits: SafetyLimits | None = None,
 ) -> ValidationReport: ...

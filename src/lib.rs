@@ -1,10 +1,10 @@
 use std::path::PathBuf;
 
 use page_validation::{
-    FailureCategory as RustFailureCategory, PdfObjectId as RustPdfObjectId,
-    SafetyLimits as RustSafetyLimits, ValidationCounts as RustValidationCounts,
-    ValidationFailure as RustValidationFailure, ValidationProfile as RustValidationProfile,
-    ValidationReport as RustValidationReport,
+    ComplianceResult as RustComplianceResult, FailureCategory as RustFailureCategory,
+    PdfObjectId as RustPdfObjectId, SafetyLimits as RustSafetyLimits,
+    ValidationCounts as RustValidationCounts, ValidationFailure as RustValidationFailure,
+    ValidationProfile as RustValidationProfile, ValidationReport as RustValidationReport,
 };
 use pyo3::create_exception;
 use pyo3::exceptions::{PyException, PyValueError};
@@ -115,28 +115,37 @@ struct SafetyLimits {
     #[pyo3(get, set)]
     max_decoded_stream_size: usize,
     #[pyo3(get, set)]
+    max_total_decoded_content_size: usize,
+    #[pyo3(get, set)]
     max_object_count: usize,
     #[pyo3(get, set)]
     max_reference_depth: usize,
+    #[pyo3(get, set)]
+    max_xref_revisions: usize,
 }
 
 #[pymethods]
 impl SafetyLimits {
     #[new]
-    #[pyo3(signature = (*, max_input_size=None, max_decoded_stream_size=None, max_object_count=None, max_reference_depth=None))]
+    #[pyo3(signature = (*, max_input_size=None, max_decoded_stream_size=None, max_total_decoded_content_size=None, max_object_count=None, max_reference_depth=None, max_xref_revisions=None))]
     fn new(
         max_input_size: Option<u64>,
         max_decoded_stream_size: Option<usize>,
+        max_total_decoded_content_size: Option<usize>,
         max_object_count: Option<usize>,
         max_reference_depth: Option<usize>,
+        max_xref_revisions: Option<usize>,
     ) -> Self {
         let defaults = RustSafetyLimits::default();
         Self {
             max_input_size: max_input_size.unwrap_or(defaults.max_input_size),
             max_decoded_stream_size: max_decoded_stream_size
                 .unwrap_or(defaults.max_decoded_stream_size),
+            max_total_decoded_content_size: max_total_decoded_content_size
+                .unwrap_or(defaults.max_total_decoded_content_size),
             max_object_count: max_object_count.unwrap_or(defaults.max_object_count),
             max_reference_depth: max_reference_depth.unwrap_or(defaults.max_reference_depth),
+            max_xref_revisions: max_xref_revisions.unwrap_or(defaults.max_xref_revisions),
         }
     }
 
@@ -148,18 +157,27 @@ impl SafetyLimits {
         RustSafetyLimits::DEFAULT_MAX_DECODED_STREAM_SIZE;
 
     #[classattr]
+    const DEFAULT_MAX_TOTAL_DECODED_CONTENT_SIZE: usize =
+        RustSafetyLimits::DEFAULT_MAX_TOTAL_DECODED_CONTENT_SIZE;
+
+    #[classattr]
     const DEFAULT_MAX_OBJECT_COUNT: usize = RustSafetyLimits::DEFAULT_MAX_OBJECT_COUNT;
 
     #[classattr]
     const DEFAULT_MAX_REFERENCE_DEPTH: usize = RustSafetyLimits::DEFAULT_MAX_REFERENCE_DEPTH;
 
+    #[classattr]
+    const DEFAULT_MAX_XREF_REVISIONS: usize = RustSafetyLimits::DEFAULT_MAX_XREF_REVISIONS;
+
     fn __repr__(&self) -> String {
         format!(
-            "SafetyLimits(max_input_size={}, max_decoded_stream_size={}, max_object_count={}, max_reference_depth={})",
+            "SafetyLimits(max_input_size={}, max_decoded_stream_size={}, max_total_decoded_content_size={}, max_object_count={}, max_reference_depth={}, max_xref_revisions={})",
             self.max_input_size,
             self.max_decoded_stream_size,
+            self.max_total_decoded_content_size,
             self.max_object_count,
             self.max_reference_depth,
+            self.max_xref_revisions,
         )
     }
 }
@@ -169,9 +187,10 @@ impl From<&SafetyLimits> for RustSafetyLimits {
         Self {
             max_input_size: limits.max_input_size,
             max_decoded_stream_size: limits.max_decoded_stream_size,
+            max_total_decoded_content_size: limits.max_total_decoded_content_size,
             max_object_count: limits.max_object_count,
             max_reference_depth: limits.max_reference_depth,
-            ..RustSafetyLimits::default()
+            max_xref_revisions: limits.max_xref_revisions,
         }
     }
 }
@@ -299,6 +318,34 @@ impl PdfDocument {
     }
 }
 
+#[pyclass(name = "ComplianceResult", frozen, eq, hash, from_py_object)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+struct ComplianceResult {
+    #[pyo3(get)]
+    profile: ValidationProfile,
+    #[pyo3(get)]
+    is_compliant: bool,
+}
+
+impl From<RustComplianceResult> for ComplianceResult {
+    fn from(result: RustComplianceResult) -> Self {
+        Self {
+            profile: result.profile.into(),
+            is_compliant: result.is_compliant,
+        }
+    }
+}
+
+#[pymethods]
+impl ComplianceResult {
+    fn __repr__(&self) -> String {
+        format!(
+            "ComplianceResult(profile={:?}, is_compliant={})",
+            self.profile, self.is_compliant
+        )
+    }
+}
+
 #[pyclass(name = "ValidationReport", frozen)]
 struct ValidationReport {
     inner: RustValidationReport,
@@ -318,8 +365,8 @@ impl ValidationReport {
     }
 
     #[getter]
-    fn checks_passed(&self) -> bool {
-        self.inner.checks_passed
+    fn is_compliant(&self) -> bool {
+        self.inner.is_compliant
     }
 
     #[getter]
@@ -371,9 +418,9 @@ impl ValidationReport {
 
     fn __repr__(&self) -> String {
         format!(
-            "ValidationReport(profile={:?}, checks_passed={}, failures={})",
+            "ValidationReport(profile={:?}, is_compliant={}, failures={})",
             ValidationProfile::from(self.inner.profile),
-            self.inner.checks_passed,
+            self.inner.is_compliant,
             self.inner.failures.len(),
         )
     }
@@ -384,57 +431,61 @@ fn limits_or_default(limits: Option<&SafetyLimits>) -> RustSafetyLimits {
 }
 
 #[pyfunction]
-#[pyo3(signature = (path, limits=None))]
-fn validate_file(
+#[pyo3(signature = (path, profile=None, limits=None))]
+fn is_pdf_compliant(
     py: Python<'_>,
     path: PathBuf,
+    profile: Option<ValidationProfile>,
     limits: Option<&SafetyLimits>,
-) -> PyResult<ValidationReport> {
+) -> PyResult<ComplianceResult> {
     let limits = limits_or_default(limits);
-    py.detach(|| page_validation::validate_file(&path, &limits))
+    py.detach(|| page_validation::is_pdf_compliant(&path, profile.map(Into::into), &limits))
         .map(Into::into)
         .map_err(|error| ValidationError::new_err(error.to_string()))
 }
 
 #[pyfunction]
-#[pyo3(signature = (path, profile, limits=None))]
-fn validate_file_with_profile(
+#[pyo3(signature = (path, profile=None, limits=None))]
+fn validate_pdf(
     py: Python<'_>,
     path: PathBuf,
-    profile: ValidationProfile,
-    limits: Option<&SafetyLimits>,
-) -> ValidationReport {
-    let limits = limits_or_default(limits);
-    py.detach(|| page_validation::validate_file_with_profile(&path, profile.into(), &limits))
-        .into()
-}
-
-#[pyfunction]
-#[pyo3(signature = (data, limits=None))]
-fn validate_bytes(
-    py: Python<'_>,
-    data: &[u8],
+    profile: Option<ValidationProfile>,
     limits: Option<&SafetyLimits>,
 ) -> PyResult<ValidationReport> {
-    let data = data.to_vec();
     let limits = limits_or_default(limits);
-    py.detach(|| page_validation::validate_bytes(&data, &limits))
+    py.detach(|| page_validation::validate_pdf(&path, profile.map(Into::into), &limits))
         .map(Into::into)
         .map_err(|error| ValidationError::new_err(error.to_string()))
 }
 
 #[pyfunction]
-#[pyo3(signature = (data, profile, limits=None))]
-fn validate_bytes_with_profile(
+#[pyo3(signature = (data, profile=None, limits=None))]
+fn is_pdf_compliant_bytes(
     py: Python<'_>,
     data: &[u8],
-    profile: ValidationProfile,
+    profile: Option<ValidationProfile>,
     limits: Option<&SafetyLimits>,
-) -> ValidationReport {
+) -> PyResult<ComplianceResult> {
     let data = data.to_vec();
     let limits = limits_or_default(limits);
-    py.detach(|| page_validation::validate_bytes_with_profile(&data, profile.into(), &limits))
-        .into()
+    py.detach(|| page_validation::is_pdf_compliant_bytes(&data, profile.map(Into::into), &limits))
+        .map(Into::into)
+        .map_err(|error| ValidationError::new_err(error.to_string()))
+}
+
+#[pyfunction]
+#[pyo3(signature = (data, profile=None, limits=None))]
+fn validate_pdf_bytes(
+    py: Python<'_>,
+    data: &[u8],
+    profile: Option<ValidationProfile>,
+    limits: Option<&SafetyLimits>,
+) -> PyResult<ValidationReport> {
+    let data = data.to_vec();
+    let limits = limits_or_default(limits);
+    py.detach(|| page_validation::validate_pdf_bytes(&data, profile.map(Into::into), &limits))
+        .map(Into::into)
+        .map_err(|error| ValidationError::new_err(error.to_string()))
 }
 
 #[pymodule]
@@ -447,10 +498,11 @@ fn _page(py: Python<'_>, module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<ValidationFailure>()?;
     module.add_class::<ValidationCounts>()?;
     module.add_class::<PdfDocument>()?;
+    module.add_class::<ComplianceResult>()?;
     module.add_class::<ValidationReport>()?;
-    module.add_function(wrap_pyfunction!(validate_file, module)?)?;
-    module.add_function(wrap_pyfunction!(validate_file_with_profile, module)?)?;
-    module.add_function(wrap_pyfunction!(validate_bytes, module)?)?;
-    module.add_function(wrap_pyfunction!(validate_bytes_with_profile, module)?)?;
+    module.add_function(wrap_pyfunction!(is_pdf_compliant, module)?)?;
+    module.add_function(wrap_pyfunction!(is_pdf_compliant_bytes, module)?)?;
+    module.add_function(wrap_pyfunction!(validate_pdf, module)?)?;
+    module.add_function(wrap_pyfunction!(validate_pdf_bytes, module)?)?;
     Ok(())
 }

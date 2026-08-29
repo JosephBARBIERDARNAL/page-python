@@ -563,8 +563,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
-name = "page-validation"
-version = "0.4.1"
+name = "page-python"
+version = "0.5.0"
 dependencies = [
  "page_validation",
  "pyo3",
@@ -573,9 +573,9 @@ dependencies = [
 
 [[package]]
 name = "page_validation"
-version = "0.4.1"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1cc0aad63b9868ed85a44a4cf9c1dc916f4a229596718aa7269b167474640ae6"
+checksum = "61fc125eecd03f2e4fadbfbaf9300b37a5d3ed36caefda628b09918998841ff5"
 dependencies = [
  "chrono",
  "lopdf",
