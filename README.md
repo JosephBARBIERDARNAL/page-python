@@ -1,6 +1,6 @@
 # page-validation
 
-Python bindings for the [`page`](https://josephbarbierdarnal.github.io/page/), a fast and lightweight PDF accessibility and compliance checker.
+Python bindings to [`page`](https://josephbarbierdarnal.github.io/page/), a fast and lightweight PDF accessibility and compliance checker.
 
 <br>
 
