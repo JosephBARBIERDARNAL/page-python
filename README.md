@@ -1,6 +1,6 @@
 # page-validation
 
-Python bindings for [`page`](https://crates.io/crates/page_validation), a PDF/A and PDF/UA validator.
+Python bindings for the [`page`](https://josephbarbierdarnal.github.io/page/), a fast and lightweight PDF accessibility and compliance checker.
 
 <br>
 

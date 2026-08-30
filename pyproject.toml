@@ -1,7 +1,7 @@
 [project]
 name = "page-validation"
 version = "0.5.0"
-description = "Python bindings for the page_validation PDF/A and PDF/UA validator"
+description = "Python bindings for the page, a fast and lightweight PDF accessibility and compliance checker."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -9,7 +9,7 @@ license-files = ["LICENSE"]
 authors = [
   { name = "Joseph Barbier", email = "joseph@ysunflower.com" },
 ]
-keywords = ["page", "pdf", "validation"]
+keywords = ["accessibility", "page", "pdf", "validation"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Operating System :: OS Independent",
@@ -21,10 +21,10 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Documentation = "https://josephbarbierdarnal.github.io/page-validation/"
-Homepage = "https://josephbarbierdarnal.github.io/page-validation/"
-Issues = "https://github.com/josephbarbierdarnal/page-validation/issues"
-Repository = "https://github.com/josephbarbierdarnal/page-validation"
+Documentation = "https://josephbarbierdarnal.github.io/page/api/python/"
+Homepage = "https://josephbarbierdarnal.github.io/page/api/python/"
+Issues = "https://github.com/josephbarbierdarnal/page-python/issues"
+Repository = "https://github.com/josephbarbierdarnal/page-python"
 
 [dependency-groups]
 dev = [
