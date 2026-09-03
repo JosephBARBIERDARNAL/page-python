@@ -28,7 +28,7 @@ def minimal_pdf() -> bytes:
 
 
 def test_version():
-    assert page.__version__ == "0.5.1"
+    assert page.__version__ == "0.6.0"
 
 
 def test_default_safety_limits():
