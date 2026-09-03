@@ -1,10 +1,10 @@
 use std::path::PathBuf;
 
 use page_validation::{
-    ComplianceResult as RustComplianceResult, FailureCategory as RustFailureCategory,
-    PdfObjectId as RustPdfObjectId, SafetyLimits as RustSafetyLimits,
-    ValidationCounts as RustValidationCounts, ValidationFailure as RustValidationFailure,
-    ValidationProfile as RustValidationProfile, ValidationReport as RustValidationReport,
+    FailureCategory as RustFailureCategory, PdfObjectId as RustPdfObjectId,
+    SafetyLimits as RustSafetyLimits, ValidationCounts as RustValidationCounts,
+    ValidationFailure as RustValidationFailure, ValidationProfile as RustValidationProfile,
+    ValidationReport as RustValidationReport,
 };
 use pyo3::create_exception;
 use pyo3::exceptions::{PyException, PyValueError};
@@ -318,34 +318,6 @@ impl PdfDocument {
     }
 }
 
-#[pyclass(name = "ComplianceResult", frozen, eq, hash, from_py_object)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
-struct ComplianceResult {
-    #[pyo3(get)]
-    profile: ValidationProfile,
-    #[pyo3(get)]
-    is_compliant: bool,
-}
-
-impl From<RustComplianceResult> for ComplianceResult {
-    fn from(result: RustComplianceResult) -> Self {
-        Self {
-            profile: result.profile.into(),
-            is_compliant: result.is_compliant,
-        }
-    }
-}
-
-#[pymethods]
-impl ComplianceResult {
-    fn __repr__(&self) -> String {
-        format!(
-            "ComplianceResult(profile={:?}, is_compliant={})",
-            self.profile, self.is_compliant
-        )
-    }
-}
-
 #[pyclass(name = "ValidationReport", frozen)]
 struct ValidationReport {
     inner: RustValidationReport,
@@ -437,10 +409,9 @@ fn is_pdf_compliant(
     path: PathBuf,
     profile: Option<ValidationProfile>,
     limits: Option<&SafetyLimits>,
-) -> PyResult<ComplianceResult> {
+) -> PyResult<bool> {
     let limits = limits_or_default(limits);
     py.detach(|| page_validation::is_pdf_compliant(&path, profile.map(Into::into), &limits))
-        .map(Into::into)
         .map_err(|error| ValidationError::new_err(error.to_string()))
 }
 
@@ -465,11 +436,10 @@ fn is_pdf_compliant_bytes(
     data: &[u8],
     profile: Option<ValidationProfile>,
     limits: Option<&SafetyLimits>,
-) -> PyResult<ComplianceResult> {
+) -> PyResult<bool> {
     let data = data.to_vec();
     let limits = limits_or_default(limits);
     py.detach(|| page_validation::is_pdf_compliant_bytes(&data, profile.map(Into::into), &limits))
-        .map(Into::into)
         .map_err(|error| ValidationError::new_err(error.to_string()))
 }
 
@@ -498,7 +468,6 @@ fn _page(py: Python<'_>, module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<ValidationFailure>()?;
     module.add_class::<ValidationCounts>()?;
     module.add_class::<PdfDocument>()?;
-    module.add_class::<ComplianceResult>()?;
     module.add_class::<ValidationReport>()?;
     module.add_function(wrap_pyfunction!(is_pdf_compliant, module)?)?;
     module.add_function(wrap_pyfunction!(is_pdf_compliant_bytes, module)?)?;

@@ -3,12 +3,6 @@ from typing import ClassVar
 
 class ValidationError(Exception): ...
 
-class ComplianceResult:
-    @property
-    def profile(self) -> ValidationProfile: ...
-    @property
-    def is_compliant(self) -> bool: ...
-
 class ValidationProfile:
     PDF_A_1B: ClassVar[ValidationProfile]
     PDF_A_1A: ClassVar[ValidationProfile]
@@ -111,12 +105,12 @@ def is_pdf_compliant(
     path: str | PathLike[str],
     profile: ValidationProfile | None = None,
     limits: SafetyLimits | None = None,
-) -> ComplianceResult: ...
+) -> bool: ...
 def is_pdf_compliant_bytes(
     data: bytes,
     profile: ValidationProfile | None = None,
     limits: SafetyLimits | None = None,
-) -> ComplianceResult: ...
+) -> bool: ...
 def validate_pdf(
     path: str | PathLike[str],
     profile: ValidationProfile | None = None,

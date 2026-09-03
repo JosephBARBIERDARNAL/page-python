@@ -22,8 +22,8 @@ if not report.is_compliant:
 For a fast boolean result, use `is_pdf_compliant()` or `is_pdf_compliant_bytes()`:
 
 ```python
-result = page.is_pdf_compliant("document.pdf")
-print(result.profile, result.is_compliant)
+is_compliant = page.is_pdf_compliant("document.pdf")
+print(is_compliant)
 ```
 
 To select the profile yourself, use the explicit-profile variant:

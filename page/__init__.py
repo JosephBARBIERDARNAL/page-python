@@ -1,5 +1,4 @@
 from page._page import (
-    ComplianceResult,
     FailureCategory,
     PdfDocument,
     PdfObjectId,
@@ -18,7 +17,6 @@ from page._page import (
 __version__ = "0.5.1"
 
 __all__ = [
-    "ComplianceResult",
     "FailureCategory",
     "PdfDocument",
     "PdfObjectId",
